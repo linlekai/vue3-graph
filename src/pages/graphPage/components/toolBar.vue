@@ -1,12 +1,20 @@
 <template>
   <div class="tool-bar">
     <div class="tool-item">
-      <TopTip content="新增">
+      <TopTip content="新增节点">
         <ElIcon :size="30" @click="handler.addItem">
           <Plus />
         </ElIcon>
       </TopTip>
     </div>
+    <div class="tool-item">
+      <TopTip content="新增combo">
+        <ElIcon :size="30" @click="handler.addCombo">
+          <CirclePlus />
+        </ElIcon>
+      </TopTip>
+    </div>
+
     <div class="tool-item">
       <TopTip content="居中视图">
         <ElIcon :size="30" @click="handler.fitCenter">
@@ -63,7 +71,8 @@ import {
   ZoomOut,
   Download,
   RefreshLeft,
-  RefreshRight
+  RefreshRight,
+  CirclePlus
 } from '@element-plus/icons-vue'
 import { ElIcon } from 'element-plus'
 import TopTip from './topTip.vue'
@@ -71,12 +80,39 @@ import Service from '../graphService'
 import { onMounted, reactive } from 'vue'
 import { IG6GraphEvent } from '@antv/g6'
 import { ref } from 'vue'
-
+import { createUniqueId } from '@/utils/index'
+import { Random } from 'mockjs'
 const eventSetup = Service.setup()
 const props = defineProps(['undoDisable', 'redoDisable'])
 
 const handler = reactive({
-  addItem: eventSetup.addItem,
+  addItem: () => {
+    let model = {
+      id: String(Random.natural()),
+      label: Random.cname(),
+      address: Random.email(),
+      x: Random.integer(0, 1920),
+      y: Random.integer(0, 880),
+      style: {
+        fill: Random.hex()
+      }
+    }
+    eventSetup.addItem('node', model)
+  },
+  addCombo: () => {
+    let model = {
+      id: String(Random.natural()),
+      parentId: null,
+      label: 'combo-' + Random.cname(),
+      type: 'circle',
+      x: Random.integer(0, 1920),
+      y: Random.integer(0, 880),
+      style: {
+        fill: Random.hex()
+      }
+    }
+    eventSetup.addItem('combo', model)
+  },
   fitCenter: eventSetup.fitCenter,
   zoom: eventSetup.zoom,
   downloadImage: eventSetup.downloadImage,
