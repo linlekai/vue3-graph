@@ -2,7 +2,12 @@
   <div>
     <Header></Header>
     <div id="graph-root">
-      <Drawer v-model:showDrawer="showDrawer" :title="title" :detailList="detailList"></Drawer>
+      <Drawer
+        :id="lastId"
+        v-model:showDrawer="showDrawer"
+        :title="title"
+        :detailList="detailList"
+      ></Drawer>
       <ToolBar :undoDisable="undoDisable" :redoDisable="redoDisable"></ToolBar>
     </div>
   </div>
@@ -22,7 +27,7 @@ export interface IPageGraph {
   instance: IGraphClass | null
 }
 
-interface IDetail {
+export interface IDetail {
   label: string
   value: string | number | boolean
 }
@@ -41,10 +46,13 @@ const redoDisable = ref(true)
 /**
  * 记录最后操作的id
  */
-const lastId: Ref<null | string> = ref(null)
+const lastId: Ref<string> = ref('')
+
 watch(showDrawer, (newValue) => {
   if (!newValue && lastId.value) {
-    pageGraph.instance?.clearItemState(lastId.value, 'selected')
+    if (pageGraph.instance?.findById(lastId.value)) {
+      pageGraph.instance?.clearItemState(lastId.value, 'selected')
+    }
   }
 })
 

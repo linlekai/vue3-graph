@@ -1,4 +1,4 @@
-import G6, { IGraph, ITEM_TYPE, ModelConfig, G6Event, IG6GraphEvent } from '@antv/g6'
+import G6, { IGraph, ITEM_TYPE, ModelConfig, G6Event, IG6GraphEvent, Item } from '@antv/g6'
 
 interface IGraphClass {
   _graph: IGraph
@@ -14,9 +14,17 @@ interface IGraphClass {
    */
   paint: () => void
   /**
-   * 新增元素（节点和边）
+   * 新增元素
    */
   addItem: (type: ITEM_TYPE, model: ModelConfig, stack?: boolean | undefined) => void
+  /**
+   * 删除元素
+   */
+  removeItem: (item: string | Item) => void
+  /**
+   * 查找元素
+   */
+  findById: (id: string) => Item | undefined
   bindEvent: (eventName: G6Event, handler: (e: IG6GraphEvent) => any) => void
   /**
    * 加水印

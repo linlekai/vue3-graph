@@ -1,6 +1,6 @@
 import { inject } from 'vue'
 import IGraphClass from '../../utils/IGraphClass'
-import { G6Event, IG6GraphEvent, ITEM_TYPE, ModelConfig } from '@antv/g6'
+import { G6Event, IG6GraphEvent, Item, ITEM_TYPE, ModelConfig } from '@antv/g6'
 
 interface IPageGraph {
   instance: IGraphClass | null
@@ -12,6 +12,9 @@ export default {
     return {
       addItem: (itemType: ITEM_TYPE, model: ModelConfig) => {
         pageGraph.instance?.addItem(itemType, model)
+      },
+      removeItem: (item: string | Item) => {
+        pageGraph.instance?.removeItem(item)
       },
       fitCenter: () => {
         pageGraph.instance?.fitCenter()

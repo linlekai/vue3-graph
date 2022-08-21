@@ -85,7 +85,7 @@ import { Random } from 'mockjs'
 const eventSetup = Service.setup()
 const props = defineProps(['undoDisable', 'redoDisable'])
 
-const handler = reactive({
+const handler = {
   addItem: () => {
     let model = {
       id: String(Random.natural()),
@@ -126,7 +126,7 @@ const handler = reactive({
       eventSetup.redo()
     }
   }
-})
+}
 </script>
 
 <style scoped lang="less">

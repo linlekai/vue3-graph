@@ -1,4 +1,4 @@
-import G6, { IGraph, ITEM_TYPE, ModelConfig, G6Event, IG6GraphEvent, ICombo } from '@antv/g6'
+import G6, { IGraph, ITEM_TYPE, ModelConfig, G6Event, IG6GraphEvent, ICombo, Item } from '@antv/g6'
 import IGraphClass from './IGraphClass'
 import { clone, isString } from '@antv/util'
 import { merge } from 'lodash'
@@ -273,6 +273,13 @@ class GraphEvent implements IGraphClass {
   addItem(type: ITEM_TYPE, model: ModelConfig, stack?: boolean | undefined) {
     this._graph.addItem(type, model, true)
   }
+  removeItem(item: string | Item) {
+    this._graph.removeItem(item, true)
+  }
+  findById(id: string) {
+    return this._graph.findById(id)
+  }
+
   pushStack(action: string, data: any, stackType: 'redo' | 'undo' | undefined) {
     this._graph.pushStack(action, data, stackType)
   }
@@ -289,7 +296,9 @@ class GraphEvent implements IGraphClass {
     this._graph.zoom(ratio)
   }
   downloadFullImage(name: string) {
-    this._graph.downloadFullImage(name, 'image/png')
+    this._graph.downloadFullImage(name, 'image/png', {
+      backgroundColor: '#fff'
+    })
   }
   setItemState(id: string, state: string) {
     this._graph.setItemState(id, state, true)

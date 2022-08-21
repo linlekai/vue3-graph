@@ -17,12 +17,18 @@
     </ElDescriptions>
     <div class="button-group">
       <ElButtonGroup>
-        <ElButton type="primary" size="small">Default</ElButton>
-        <ElButton type="primary" size="small">Default</ElButton>
-        <ElButton type="primary" size="small">Default</ElButton>
-        <ElButton type="primary" size="small">Default</ElButton>
-        <ElButton type="primary" size="small">Default</ElButton>
-        <ElButton type="primary" size="small">Default</ElButton>
+        <ElButton type="primary" size="default" @click="handler.copyToClipboard">
+          <ElIcon>
+            <CopyDocument />
+          </ElIcon>
+          <span>复制 id</span>
+        </ElButton>
+        <ElButton type="danger" size="default" @click="handler.removeNode">
+          <ElIcon>
+            <Delete />
+          </ElIcon>
+          <span>删除</span>
+        </ElButton>
       </ElButtonGroup>
     </div>
   </ElDrawer>
@@ -36,16 +42,21 @@ import {
   ElDescriptionsItem,
   ElTag,
   ElButtonGroup,
-  ElButton
+  ElButton,
+  ElIcon,
+  ElMessage
 } from 'element-plus'
+import { CopyDocument, Delete } from '@element-plus/icons-vue'
 import type { IPageGraph } from '../index.vue'
-
-type IDetail = Record<string, any>
+import copy from 'copy-to-clipboard'
+import type { IDetail } from '../index.vue'
+import Service from '../graphService'
 
 interface IProps {
   title: string
   showDrawer: boolean
   detailList: Array<IDetail>
+  id: string
 }
 // const props = defineProps({
 //   showDrawer: Boolean,
@@ -54,8 +65,28 @@ interface IProps {
 // })
 const props = defineProps<IProps>()
 const $emit = defineEmits(['update:showDrawer'])
-const pageGraph: IPageGraph = inject('pageGraph', { instance: null })
+const eventSetup = Service.setup()
 
+const handler = {
+  removeNode: () => {
+    $emit('update:showDrawer', false)
+    eventSetup.removeItem(props.id)
+    ElMessage({
+      message: '删除成功',
+      type: 'success'
+    })
+  },
+  /**
+   * 复制内容到剪贴板
+   */
+  copyToClipboard() {
+    copy(props.id)
+    ElMessage({
+      message: '已复制',
+      type: 'success'
+    })
+  }
+}
 function closeEvent() {
   $emit('update:showDrawer', false)
 }
