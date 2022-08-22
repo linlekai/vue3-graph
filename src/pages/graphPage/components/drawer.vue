@@ -29,8 +29,19 @@
           </ElIcon>
           <span>删除</span>
         </ElButton>
+        <ElButton type="primary" size="default" @click="handler.linkToItem">
+          <ElIcon>
+            <TopRight />
+          </ElIcon>
+          <span>指向元素</span>
+        </ElButton>
       </ElButtonGroup>
     </div>
+    <CreateEdgeDialog
+      :source-id="props.id"
+      :dialogVisible="dialogVisible"
+      @close-dialog="handleCloseDialog"
+    ></CreateEdgeDialog>
   </ElDrawer>
 </template>
 
@@ -44,13 +55,15 @@ import {
   ElButtonGroup,
   ElButton,
   ElIcon,
-  ElMessage
+  ElMessage,
+  ElMessageBox
 } from 'element-plus'
-import { CopyDocument, Delete } from '@element-plus/icons-vue'
+import { CopyDocument, Delete, TopRight } from '@element-plus/icons-vue'
 import type { IPageGraph } from '../index.vue'
 import copy from 'copy-to-clipboard'
 import type { IDetail } from '../index.vue'
 import Service from '../graphService'
+import CreateEdgeDialog from './createEdgeDialog.vue'
 
 interface IProps {
   title: string
@@ -66,7 +79,7 @@ interface IProps {
 const props = defineProps<IProps>()
 const $emit = defineEmits(['update:showDrawer'])
 const eventSetup = Service.setup()
-
+const dialogVisible = ref(false)
 const handler = {
   removeNode: () => {
     $emit('update:showDrawer', false)
@@ -85,10 +98,23 @@ const handler = {
       message: '已复制',
       type: 'success'
     })
+  },
+  /**
+   * 指向元素
+   */
+  linkToItem() {
+    dialogVisible.value = true
   }
 }
 function closeEvent() {
   $emit('update:showDrawer', false)
+}
+function handleCloseDialog(payload: boolean) {
+  dialogVisible.value = false
+  console.log('payload', payload)
+  if (payload) {
+    $emit('update:showDrawer', false)
+  }
 }
 </script>
 

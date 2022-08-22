@@ -20,10 +20,13 @@ class GraphEvent implements IGraphClass {
         default: ['drag-combo', 'drag-node', 'zoom-canvas', 'drag-canvas']
       },
       layout: {
-        type: 'radial',
+        type: 'gForce',
         unitRadius: 200,
         preventOverlap: true,
-        strictRadial: false
+        nodeSpacing: 30,
+        strictRadial: false,
+        nodeSize: 30,
+        gpuEnabled: true
       },
       enabledStack: true,
       animate: true,

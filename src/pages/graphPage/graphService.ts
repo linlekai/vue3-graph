@@ -33,6 +33,9 @@ export default {
       },
       bindEvent: (eventName: G6Event, handler: (e: IG6GraphEvent) => any) => {
         pageGraph.instance?.bindEvent(eventName, handler)
+      },
+      findById: (id: string): Item | undefined => {
+        return pageGraph.instance?.findById(id)
       }
     }
   }
