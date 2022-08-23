@@ -38,6 +38,7 @@
       </ElButtonGroup>
     </div>
     <CreateEdgeDialog
+      v-if="dialogVisible"
       :source-id="props.id"
       :dialogVisible="dialogVisible"
       @close-dialog="handleCloseDialog"
@@ -111,7 +112,6 @@ function closeEvent() {
 }
 function handleCloseDialog(payload: boolean) {
   dialogVisible.value = false
-  console.log('payload', payload)
   if (payload) {
     $emit('update:showDrawer', false)
   }

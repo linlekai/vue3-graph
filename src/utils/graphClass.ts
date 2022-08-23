@@ -20,18 +20,20 @@ class GraphEvent implements IGraphClass {
         default: ['drag-combo', 'drag-node', 'zoom-canvas', 'drag-canvas']
       },
       layout: {
-        type: 'gForce',
-        unitRadius: 200,
+        type: 'dagre',
+        // unitRadius: 200,
         preventOverlap: true,
         nodeSpacing: 30,
-        strictRadial: false,
-        nodeSize: 30,
-        gpuEnabled: true
+        strictRadial: false
+        // gpuEnabled: true
       },
       enabledStack: true,
       animate: true,
       defaultNode: {
-        size: 50
+        size: 90,
+        style: {
+          fontSize: 80
+        }
       },
       defaultEdge: {
         style: {

@@ -14,6 +14,13 @@
         </ElIcon>
       </TopTip>
     </div>
+    <div class="tool-item">
+      <TopTip content="新增边">
+        <ElIcon :size="30" @click="handler.addEdge">
+          <TopRight />
+        </ElIcon>
+      </TopTip>
+    </div>
 
     <div class="tool-item">
       <TopTip content="居中视图">
@@ -58,6 +65,11 @@
       </TopTip>
     </div>
   </div>
+  <createEdgeDialogVue
+    v-if="edgeDialogVisible"
+    :dialogVisible="edgeDialogVisible"
+    @close-dialog="closeEdgeDialog"
+  ></createEdgeDialogVue>
 </template>
 
 <script setup lang="ts">
@@ -72,7 +84,8 @@ import {
   Download,
   RefreshLeft,
   RefreshRight,
-  CirclePlus
+  CirclePlus,
+  TopRight
 } from '@element-plus/icons-vue'
 import { ElIcon } from 'element-plus'
 import TopTip from './topTip.vue'
@@ -82,16 +95,21 @@ import { IG6GraphEvent } from '@antv/g6'
 import { ref } from 'vue'
 import { createUniqueId } from '@/utils/index'
 import { Random } from 'mockjs'
+import createEdgeDialogVue from './createEdgeDialog.vue'
 const eventSetup = Service.setup()
 const props = defineProps(['undoDisable', 'redoDisable'])
 
+const edgeDialogVisible = ref(false)
+const closeEdgeDialog = (flag: boolean) => {
+  edgeDialogVisible.value = false
+}
 const handler = {
   addItem: () => {
     let model = {
       id: String(Random.natural()),
       label: Random.cname(),
       address: Random.email(),
-      x: Random.integer(0, 1920),
+      x: Random.integer(0, 1000),
       y: Random.integer(0, 880),
       style: {
         fill: Random.hex()
@@ -105,13 +123,16 @@ const handler = {
       parentId: null,
       label: 'combo-' + Random.cname(),
       type: 'circle',
-      x: Random.integer(0, 1920),
+      x: Random.integer(0, 1000),
       y: Random.integer(0, 880),
       style: {
         fill: Random.hex()
       }
     }
     eventSetup.addItem('combo', model)
+  },
+  addEdge: () => {
+    edgeDialogVisible.value = true
   },
   fitCenter: eventSetup.fitCenter,
   zoom: eventSetup.zoom,

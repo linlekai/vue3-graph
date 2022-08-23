@@ -1,7 +1,15 @@
 <template>
-  <ElDialog :model-value="props.dialogVisible" title="Tips" width="30%" @close="closeDialog">
+  <ElDialog
+    :model-value="props.dialogVisible"
+    title="新增边"
+    width="40%"
+    @close="closeDialog(false)"
+  >
     <ElForm ref="ruleFormRef" :model="form" :rules="rules">
-      <ElFormItem label="id" :label-width="formLabelWidth" prop="id">
+      <ElFormItem label="当前元素id" :label-width="formLabelWidth" prop="source">
+        <ElInput v-model="form.source" :disabled="sourceDisabled"></ElInput>
+      </ElFormItem>
+      <ElFormItem label="目标元素id" :label-width="formLabelWidth" prop="id">
         <ElInput v-model="form.id"></ElInput>
       </ElFormItem>
       <ElFormItem label="label" :label-width="formLabelWidth" prop="label">
@@ -10,7 +18,7 @@
     </ElForm>
     <template #footer>
       <div class="footer">
-        <ElButton @click="closeDialog">取消</ElButton>
+        <ElButton @click="closeDialog(false)">取消</ElButton>
         <ElButton type="primary" @click="checkForm">提交</ElButton>
       </div>
     </template>
@@ -18,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, defineProps, defineEmits } from 'vue'
+import { reactive, ref, defineProps, defineEmits, onMounted } from 'vue'
 import {
   ElDialog,
   ElForm,
@@ -36,7 +44,7 @@ import { stubFalse } from 'lodash'
 const props = defineProps({
   sourceId: {
     type: String,
-    required: true
+    required: false
   },
   dialogVisible: Boolean
 })
@@ -44,16 +52,30 @@ const $emit = defineEmits(['closeDialog'])
 const eventSetup = Service.setup()
 
 const ruleFormRef = ref<FormInstance>()
-const formLabelWidth = '80px'
+const sourceDisabled = ref(false)
+const formLabelWidth = '100px'
 // const dialogVisible = ref(false)
 const form = reactive({
+  source: '',
   id: '',
   label: ''
 })
 const rules = reactive<FormRules>({
+  source: [{ required: true, message: '请输入id', trigger: 'blur' }],
   id: [{ required: true, message: '请输入id', trigger: 'blur' }],
   label: [{ required: true, message: '请输入label', trigger: 'blur' }]
 })
+
+onMounted(() => {
+  initData()
+})
+function initData() {
+  form.source = props.sourceId ?? ''
+  if (props.sourceId) {
+    form.source = props.sourceId
+    sourceDisabled.value = true
+  }
+}
 async function checkForm() {
   if (!ruleFormRef.value) return
   await ruleFormRef.value.validate((valid, fields) => {
@@ -72,13 +94,14 @@ function closeDialog(flag = false) {
   $emit('closeDialog', flag)
 }
 function comfirm() {
+  if (!form.source) return
   let model = {
     id: String(Random.natural()),
-    source: props.sourceId,
+    source: form.source,
     target: form.id,
     label: form.label
   }
-  let source = eventSetup.findById(props.sourceId)
+  let source = eventSetup.findById(form.source)
   let target = eventSetup.findById(form.id)
   if (source && target) {
     eventSetup.addItem('edge', model)
