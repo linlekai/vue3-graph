@@ -4,4 +4,4 @@
 
 [在线地址](https://vue3-graph-linlekai.vercel.app/)
 
-![效果](https://github.com/linlekai/vue3-graph/blob/main/images/page.png?raw=true)
+![效果](https://github.com/linlekai/vue3-graph/blob/main/images/page1.png?raw=true)
