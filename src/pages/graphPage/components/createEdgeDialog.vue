@@ -37,7 +37,7 @@ import {
   FormInstance,
   ElMessage
 } from 'element-plus'
-import Service from '../graphService'
+import Service from '../graphEvent'
 import { Random } from 'mockjs'
 import { stubFalse } from 'lodash'
 

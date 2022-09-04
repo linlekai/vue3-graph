@@ -63,7 +63,7 @@ import { CopyDocument, Delete, TopRight } from '@element-plus/icons-vue'
 import type { IPageGraph } from '../index.vue'
 import copy from 'copy-to-clipboard'
 import type { IDetail } from '../index.vue'
-import Service from '../graphService'
+import Service from '../graphEvent'
 import CreateEdgeDialog from './createEdgeDialog.vue'
 
 interface IProps {

@@ -465,6 +465,10 @@ function initGraph() {
     ]
     pageGraph.instance?.setItemState(lastId.value, 'selected')
   })
+  pageGraph.instance.bindEvent('combo:click', (combo) => {
+    showDrawer.value = true
+    title.value = 'combo信息'
+  })
 
   pageGraph.instance?.bindEvent('stackchange', (evt: IG6GraphEvent) => {
     const { undoStack, redoStack } = evt

@@ -89,7 +89,7 @@ import {
 } from '@element-plus/icons-vue'
 import { ElIcon } from 'element-plus'
 import TopTip from './topTip.vue'
-import Service from '../graphService'
+import Service from '../graphEvent'
 import { onMounted, reactive } from 'vue'
 import { IG6GraphEvent } from '@antv/g6'
 import { ref } from 'vue'
